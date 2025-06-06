@@ -1,5 +1,3 @@
-local TypeFunction = typeof or type
-
 local StringTypes = {
     ["boolean"] = true,
     ["table"] = true,
@@ -9,14 +7,10 @@ local StringTypes = {
     ["nil"] = true
 }
 
-local RawEqual = rawequal or function(A, B)
-    return A == B
-end
-
 local function CountTable(Table)
     local Count = 0
 
-    for _, _ in next, Table do
+    for Index, Value in pairs(Table) do
         Count = Count + 1
     end
 
@@ -31,6 +25,7 @@ local function GetStringRepresentation(Object, ObjectType)
     end
 
     Metatable = (getrawmetatable or getmetatable)(Object)
+    
     if not Metatable then
         return tostring(Object)
     end
@@ -44,7 +39,7 @@ local function GetStringRepresentation(Object, ObjectType)
 end
 
 local function FormatValue(Value)
-    local ValueType = TypeFunction(Value)
+    local ValueType = typeof(Value)
 
     if StringTypes[ValueType] then
         return GetStringRepresentation(Value, ValueType)
